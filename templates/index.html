@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}HSCO - Registros{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <h1 class="page-title">Registros</h1>
+    <p class="page-sub">{{ registros|length }} entrada{{ 's' if registros|length != 1 else '' }} na coleção</p>
+  </div>
+  <a href="{{ url_for('novo') }}" class="btn btn--primary">+ Novo registro</a>
+</section>
+
+{% if registros %}
+<div class="table-wrap">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in registros %}
+      <tr class="table-row" style="--delay: {{ loop.index0 * 60 }}ms">
+        <td class="td-id"><span class="id-badge">{{ loop.index }}</span></td>
+        <td class="td-name">{{ r.nome }}</td>
+        <td class="td-email">{{ r.email }}</td>
+        <td class="td-phone">{{ r.telefone }}</td>
+        <td class="td-actions">
+          <a href="{{ url_for('editar', id=r._id) }}" class="btn btn--sm btn--edit">Editar</a>
+          <button class="btn btn--sm btn--delete" onclick="confirmarDelete('{{ r._id }}', '{{ r.nome }}')">Excluir</button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty-state">
+  <div class="empty-icon">◫</div>
+  <p class="empty-title">Nenhum registro ainda</p>
+  <p class="empty-sub">Clique em <strong>+ Novo registro</strong> para começar.</p>
+</div>
+{% endif %}
+
+<!-- Modal de confirmação de exclusão -->
+<div id="modal-overlay" class="modal-overlay hidden">
+  <div class="modal">
+    <p class="modal-title">Excluir registro?</p>
+    <p class="modal-body">Você está prestes a excluir <strong id="modal-nome"></strong>. Esta ação não pode ser desfeita.</p>
+    <div class="modal-actions">
+      <button class="btn btn--secondary" onclick="fecharModal()">Cancelar</button>
+      <form id="form-delete" method="POST">
+        <button type="submit" class="btn btn--danger">Sim, excluir</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

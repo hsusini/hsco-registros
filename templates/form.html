@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if acao == 'editar' else 'Novo' }} Registro — CRUD{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div>
+    <h1 class="page-title">{{ 'Editar registro' if acao == 'editar' else 'Novo registro' }}</h1>
+    <p class="page-sub">{{ 'Atualize os dados abaixo.' if acao == 'editar' else 'Preencha os campos para cadastrar.' }}</p>
+  </div>
+  <a href="{{ url_for('index') }}" class="btn btn--secondary">← Voltar</a>
+</section>
+
+<div class="form-card">
+  <form method="POST" action="{{ url_for('editar', id=dados._id) if acao == 'editar' else url_for('novo') }}" novalidate>
+
+    <div class="field">
+      <label class="label" for="nome">Nome completo</label>
+      <input
+        class="input"
+        type="text"
+        id="nome"
+        name="nome"
+        value="{{ dados.get('nome', '') }}"
+        placeholder="Ex: Maria Silva"
+        required
+        autocomplete="name"
+      />
+    </div>
+
+    <div class="field">
+      <label class="label" for="email">E-mail</label>
+      <input
+        class="input"
+        type="email"
+        id="email"
+        name="email"
+        value="{{ dados.get('email', '') }}"
+        placeholder="Ex: maria@email.com"
+        required
+        autocomplete="email"
+      />
+    </div>
+
+    <div class="field">
+      <label class="label" for="telefone">Telefone</label>
+      <input
+        class="input"
+        type="tel"
+        id="telefone"
+        name="telefone"
+        value="{{ dados.get('telefone', '') }}"
+        placeholder="Ex: (21) 99999-0000"
+        required
+        autocomplete="tel"
+      />
+    </div>
+
+    <div class="form-footer">
+      <a href="{{ url_for('index') }}" class="btn btn--secondary">Cancelar</a>
+      <button type="submit" class="btn btn--primary">
+        {{ 'Salvar alterações' if acao == 'editar' else 'Cadastrar' }}
+      </button>
+    </div>
+
+  </form>
+</div>
+{% endblock %}
